@@ -11,7 +11,7 @@ module satoshi_flip::single_player_satoshi {
 
     use sui::coin::{Self, Coin};
     use sui::balance::{Self, Balance};
-    use sui::sui::SUI;
+    use sui::man::MAN;
     use sui::bls12381::bls12381_min_pk_verify;
     use sui::object::{Self, UID, ID};
     use sui::tx_context::{Self, TxContext};
@@ -69,7 +69,7 @@ module satoshi_flip::single_player_satoshi {
     struct Game has key, store {
         id: UID,
         guess_placed_epoch: u64,
-        total_stake: Balance<SUI>,
+        total_stake: Balance<MAN>,
         guess: String,
         player: address,
         vrf_input: vector<u8>,
@@ -78,7 +78,7 @@ module satoshi_flip::single_player_satoshi {
 
     /// Function used to create a new game. The player must provide a guess and a Counter NFT.
     /// Stake is taken from the player's coin and added to the game's stake. The house's stake is also added to the game's stake.
-    public fun start_game(guess: String, counter: &mut Counter, coin: Coin<SUI>, house_data: &mut HouseData, ctx: &mut TxContext): ID {
+    public fun start_game(guess: String, counter: &mut Counter, coin: Coin<MAN>, house_data: &mut HouseData, ctx: &mut TxContext): ID {
         let fee_bp = hd::base_fee_in_bp(house_data);
         let (id, new_game) = internal_start_game(guess, counter, coin, house_data, fee_bp, ctx);
 
@@ -234,7 +234,7 @@ module satoshi_flip::single_player_satoshi {
     /// The player must provide a guess and a Counter NFT.
     /// Stake is taken from the player's coin and added to the game's stake. 
     /// The house's stake is also added to the game's stake.
-    fun internal_start_game(guess: String, counter: &mut Counter, coin: Coin<SUI>, house_data: &mut HouseData, fee_bp: u16, ctx: &mut TxContext): (ID, Game) {
+    fun internal_start_game(guess: String, counter: &mut Counter, coin: Coin<MAN>, house_data: &mut HouseData, fee_bp: u16, ctx: &mut TxContext): (ID, Game) {
         // Ensure guess is valid.
         map_guess(guess);
         let user_stake = coin::value(&coin);

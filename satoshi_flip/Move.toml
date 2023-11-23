@@ -3,7 +3,9 @@ name = "satoshi_flip"
 version = "0.0.1"
 
 [dependencies]
-Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
+#Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
+#Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "f4d16270b2567356dff78e58fb417241b4e78455" }
+Sui = { local = "/root/man/man-move/crates/sui-framework/packages/sui-framework" }
 
 [addresses]
 satoshi_flip = "0x0"

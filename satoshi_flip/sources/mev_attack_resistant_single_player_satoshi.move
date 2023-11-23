@@ -12,7 +12,7 @@ module satoshi_flip::mev_attack_resistant_single_player_satoshi {
 
     use sui::coin::{Self, Coin};
     use sui::balance::{Self, Balance};
-    use sui::sui::SUI;
+    use sui::man::MAN;
     use sui::bls12381::bls12381_min_pk_verify;
     use sui::object::{Self, UID, ID};
     use sui::tx_context::{Self, TxContext};
@@ -76,7 +76,7 @@ module satoshi_flip::mev_attack_resistant_single_player_satoshi {
     struct Game has key, store {
         id: UID,
         guess_placed_epoch: Option<u64>,
-        total_stake: Balance<SUI>,
+        total_stake: Balance<MAN>,
         guess: Option<String>,
         player: address,
         vrf_input: Option<vector<u8>>,
@@ -87,7 +87,7 @@ module satoshi_flip::mev_attack_resistant_single_player_satoshi {
     /// Function used to create a new game.
     /// Stake is taken from the player's coin and added to the game's stake.
     /// The house's stake is also added to the game's stake.
-    public fun create_game_and_submit_stake(house_data: &mut HouseData, coin: Coin<SUI>, ctx: &mut TxContext): ID {
+    public fun create_game_and_submit_stake(house_data: &mut HouseData, coin: Coin<MAN>, ctx: &mut TxContext): ID {
         let fee_bp = hd::base_fee_in_bp(house_data);
         let (id, new_game) = internal_create_game_and_submit_stake(house_data, coin, fee_bp, ctx);
 
@@ -320,7 +320,7 @@ module satoshi_flip::mev_attack_resistant_single_player_satoshi {
     /// Internal helper function used to create a new game.
     /// Stake is taken from the player's coin and added to the game's stake.
     /// The house's stake is also added to the game's stake.
-    fun internal_create_game_and_submit_stake(house_data: &mut HouseData, coin: Coin<SUI>, fee_bp: u16, ctx: &mut TxContext): (ID, Game) {
+    fun internal_create_game_and_submit_stake(house_data: &mut HouseData, coin: Coin<MAN>, fee_bp: u16, ctx: &mut TxContext): (ID, Game) {
         let user_stake = coin::value(&coin);
         // Ensure that the stake is not higher than the max stake.
         assert!(user_stake <= hd::max_stake(house_data), EStakeTooHigh);

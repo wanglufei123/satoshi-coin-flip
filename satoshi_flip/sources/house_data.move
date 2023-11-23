@@ -8,7 +8,7 @@ module satoshi_flip::house_data {
 
     use sui::object::{Self, UID};
     use sui::balance::{Self, Balance};
-    use sui::sui::SUI;
+    use sui::man::MAN;
     use sui::coin::{Self, Coin};
     use sui::package::{Self};
     use sui::tx_context::{Self, TxContext};
@@ -24,12 +24,12 @@ module satoshi_flip::house_data {
     /// Configuration and Treasury object, managed by the house.
     struct HouseData has key {
         id: UID,
-        balance: Balance<SUI>, // House's balance which also contains the acrued winnings of the house.
+        balance: Balance<MAN>, // House's balance which also contains the acrued winnings of the house.
         house: address,
         public_key: vector<u8>, // Public key used to verify the beacon produced by the back-end.
         max_stake: u64,
         min_stake: u64,
-        fees: Balance<SUI>, // The acrued fees from games played.
+        fees: Balance<MAN>, // The acrued fees from games played.
         base_fee_in_bp: u16 // The default fee in basis points. 1 basis point = 0.01%.
     }
 
@@ -61,7 +61,7 @@ module satoshi_flip::house_data {
     /// It also sets the max and min stake values, that can later on be updated.
     /// Stores the house address and the base fee in basis points.
     /// This object is involed in all games created by the same instance of this package.
-    public fun initialize_house_data(house_cap: HouseCap, coin: Coin<SUI>, public_key: vector<u8>, ctx: &mut TxContext) {
+    public fun initialize_house_data(house_cap: HouseCap, coin: Coin<MAN>, public_key: vector<u8>, ctx: &mut TxContext) {
         assert!(coin::value(&coin) > 0, EInsufficientBalance);
 
         let house_data = HouseData {
@@ -83,7 +83,7 @@ module satoshi_flip::house_data {
 
     /// Function used to top up the house balance. Can be called by anyone.
     /// House can have multiple accounts so giving the treasury balance is not limited.
-    public fun top_up(house_data: &mut HouseData, coin: Coin<SUI>, _: &mut TxContext) {
+    public fun top_up(house_data: &mut HouseData, coin: Coin<MAN>, _: &mut TxContext) {
         coin::put(&mut house_data.balance, coin)
     }
 
@@ -129,12 +129,12 @@ module satoshi_flip::house_data {
     // --------------- HouseData Mutations ---------------
 
     /// Returns a mutable reference to the balance of the house.
-    public(friend) fun borrow_balance_mut(house_data: &mut HouseData): &mut Balance<SUI> {
+    public(friend) fun borrow_balance_mut(house_data: &mut HouseData): &mut Balance<MAN> {
         &mut house_data.balance
     }
 
     /// Returns a mutable reference to the fees of the house.
-    public(friend) fun borrow_fees_mut(house_data: &mut HouseData): &mut Balance<SUI> {
+    public(friend) fun borrow_fees_mut(house_data: &mut HouseData): &mut Balance<MAN> {
         &mut house_data.fees
     }
 
